@@ -9,7 +9,6 @@
 import Foundation
 
 fileprivate struct Constants {
-    static let letterMaskCharacter: Character = "A"
     static let numberMaskCharacter: Character = "0"
 }
 
@@ -32,7 +31,7 @@ public struct JMStringMask: Equatable {
     public func mask(string: String?) -> String? {
         
         guard let string = string else { return nil }
-
+        
         if string.count > self.mask.count {
             return nil
         }
@@ -51,17 +50,16 @@ public struct JMStringMask: Equatable {
             if currentCharacter == maskCharacter {
                 formattedString.append(currentCharacter)
             } else {
-                while (maskCharacter != Constants.letterMaskCharacter && maskCharacter != Constants.numberMaskCharacter) {
+                while (maskCharacter != Constants.numberMaskCharacter) {
                     formattedString.append(maskCharacter)
                     
                     currentMaskIndex += 1
                     maskCharacter = self.mask[self.mask.index(string.startIndex, offsetBy: currentMaskIndex)]
                 }
                 
-                let isValidLetter = maskCharacter == Constants.letterMaskCharacter && self.isValidLetterCharacter(currentCharacter)
                 let isValidNumber = maskCharacter == Constants.numberMaskCharacter && self.isValidNumberCharacter(currentCharacter)
                 
-                if !isValidLetter && !isValidNumber {
+                if !isValidNumber {
                     return nil
                 }
                 
@@ -80,24 +78,12 @@ public struct JMStringMask: Equatable {
         var unmaskedValue = ""
         
         for character in string {
-            if self.isValidLetterCharacter(character) || self.isValidNumberCharacter(character) {
+            if self.isValidNumberCharacter(character) {
                 unmaskedValue.append(character)
             }
         }
         
         return unmaskedValue
-    }
-    
-    private func isValidLetterCharacter(_ character: Character) -> Bool {
-
-        let string = String(character)
-        if string.unicodeScalars.count > 1 {
-            return false
-        }
-        
-        let lettersSet = NSCharacterSet.letters
-        let unicodeScalars = string.unicodeScalars
-        return lettersSet.contains(unicodeScalars[unicodeScalars.startIndex])
     }
     
     private func isValidNumberCharacter(_ character: Character) -> Bool {
@@ -107,9 +93,11 @@ public struct JMStringMask: Equatable {
             return false
         }
         
-        let lettersSet = NSCharacterSet.decimalDigits
+        let numberSet = NSCharacterSet.decimalDigits
+        let numberUnicodeScalars = string.unicodeScalars
+        let lettersSet = NSCharacterSet.letters
         let unicodeScalars = string.unicodeScalars
-        return lettersSet.contains(unicodeScalars[unicodeScalars.startIndex])
+        return lettersSet.contains(unicodeScalars[unicodeScalars.startIndex]) || numberSet.contains(numberUnicodeScalars[numberUnicodeScalars.startIndex])
     }
     
 }
