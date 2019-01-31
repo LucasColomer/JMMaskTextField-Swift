@@ -10,10 +10,7 @@ Back in my JavaScript days (oh what dark ages) it was quite simple to apply a ma
 I never found anything that simple on iOS. Some libs required you to write a regex pattern and other crazy stuff. Sure, that can be useful for more complex cases, but I just wanted something simple and straightforward. From that need came ```JMMaskTextField```.
 
 ```JMMaskTextField``` allows you to mask your ```UITextField``` by simply setting a mask pattern string. Mask characters are:
-* `A` for letters
-* `0` for numbers
-
-So for a Brazilian license plate, which has 3 letters, a dash and then 4 numbers, the mask would be: ```AAA-0000```.
+* `0` for Alphanumeric
 
 ```JMMaskTextField``` also handles pasting, inserting and deleting from the middle.
 
@@ -59,7 +56,7 @@ And that's it!
 You can use the string masking functionality outside of the text field. Usage is also simple:
 ```swift
 let mask = JMStringMask(mask: "00000-000")
-let maskedString = mask.mask(string: "30310360") // returns "30310-360"
+let maskedString = mask.mask(string: "30A10F60") // returns "30A10-F60"
 let unmaskedString = mask.unmask(string: maskedString) // returns "30310360"
 ```
 
